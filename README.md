@@ -20,14 +20,67 @@
 * Lambertian Model
 
 ## Build
-```
-git clone https://github.com/lanwenzhang/Software-Rasterizer
+### 1. Clone the Repository
+```sh
+git clone https://github.com/lanwenzhang/Software-Rasterizer.git
 cd Software-Rasterizer
+```
+
+### 2. Install Required Dependencies
+#### **Windows**
+- Install [CMake](https://cmake.org/download/)
+- Install a C++ compiler (MinGW or Visual Studio)
+
+#### Linux/macOS
+Ensure CMake and a C++ compiler (`g++`/`clang`) are installed:
+```sh
+sudo apt install cmake g++    # Ubuntu/Debian
+brew install cmake            # macOS
+```
+
+### 3. Create a Build Directory
+```sh
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-cmake --build . --config Release
 ```
+
+### 4. Run CMake to Configure the Project
+
+#### Windows (Visual Studio Generator)
+```sh
+cmake .. -G "Visual Studio 17 2022"
+```
+
+#### Windows (MinGW)
+```sh
+cmake .. -G "MinGW Makefiles"
+```
+
+#### Linux/macOS
+```sh
+cmake ..
+```
+
+### 5. Compile the Project
+#### Windows (Visual Studio)
+Open `Software-Rasterizer.sln` in Visual Studio and build.
+
+#### Windows (MinGW)
+```sh
+mingw32-make
+```
+
+#### Linux/macOS
+```sh
+make
+```
+
+### 6. Run the Executable
+```sh
+./SoftwareRasterizer  # Linux/macOS
+SoftwareRasterizer.exe  # Windows
+```
+
 
 ## Dependencies
 * [stb](https://github.com/nothings/stb)
