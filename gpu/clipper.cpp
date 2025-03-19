@@ -64,6 +64,38 @@ void Clipper::doClipSpace(const uint32_t& drawMode, const std::vector<VsOutput>&
 
 }
 
+bool Clipper::cullFace(const uint32_t& frontFace, const uint32_t& cullFace, const VsOutput& v0, const VsOutput& v1, const VsOutput& v2) {
+
+	math::vec3f edge1 = v1.mPosition - v0.mPosition;
+	math::vec3f edge2 = v2.mPosition - v0.mPosition;
+
+	math::vec3f normal = math::cross(edge1, edge2);
+
+
+	if (cullFace == BACK_FACE) {
+
+		if (frontFace == FRONT_FACE_CCW) {
+
+			return normal.z > 0;
+		}
+		else {
+
+			return normal.z < 0;
+		}
+	}
+	else {
+
+		if (frontFace == FRONT_FACE_CCW) {
+			return normal.z < 0;
+		}
+		else {
+
+			return normal.z > 0;
+		}
+	}
+}
+
+
 void Clipper::sutherlandHodgman(const uint32_t& drawMode, const std::vector<VsOutput>& primitive, std::vector<VsOutput>& outputs) {
 
 	assert(outputs.size() == 0);
@@ -149,6 +181,7 @@ VsOutput Clipper::intersect(const VsOutput& last, const VsOutput& current, const
 
 	output.mPosition = math::lerp(last.mPosition, current.mPosition, weight);
 	output.mColor = math::lerp(last.mColor, current.mColor, weight);
+	output.mNormal = math::lerp(last.mNormal, current.mNormal, weight);
 	output.mUV = math::lerp(last.mUV, current.mUV, weight);
 
 	return output;

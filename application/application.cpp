@@ -1,4 +1,5 @@
 #include "application.h"
+#include <windowsx.h>
 
 
 Application* Application::mInstance = nullptr;
@@ -129,6 +130,37 @@ void Application::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
 	switch (message)
 	{
+	case WM_KEYDOWN: {
+		if (mCamera) {
+			mCamera->onKeyDown(wParam);
+		}
+		break;
+	}
+	case WM_KEYUP: {
+		if (mCamera) {
+			mCamera->onKeyUp(wParam);
+		}
+		break;
+	}
+	case WM_RBUTTONDOWN: {
+		if (mCamera) {
+			mCamera->onRMouseDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		}
+		break;
+	}
+	case WM_RBUTTONUP: {
+		if (mCamera) {
+			mCamera->onRMouseUp(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		}
+		break;
+	}
+
+	case WM_MOUSEMOVE: {
+		if (mCamera) {
+			mCamera->onMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		}
+		break;
+	}
 	case WM_CLOSE: {
 		DestroyWindow(hWnd);
 		break;
@@ -163,5 +195,10 @@ bool Application::peekMessage(){
 void Application::show() {
 
 	BitBlt(mhDC, 0, 0, mWidth, mHeight, mCanvasDC, 0, 0, SRCCOPY);
+}
+
+void Application::setCamera(Camera* camera) {
+
+	mCamera = camera;
 }
 

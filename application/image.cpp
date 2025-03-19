@@ -30,7 +30,6 @@ Image* Image::createImage(const std::string& path) {
 	int picType = 0;
 	int width{ 0 }, height{ 0 };
 
-
 	// 2 Flip y-axis
 	stbi_set_flip_vertically_on_load(true);
 
@@ -54,7 +53,35 @@ Image* Image::createImage(const std::string& path) {
 	return image;
 }
 
-void Image::destoryImage(Image* image) {
+Image* Image::createImageFromMemory(const std::string& path, unsigned char* dataIn, uint32_t widthIn,uint32_t heightIn) {
+	
+	int picType = 0;
+	int width{ 0 }, height{ 0 };
+
+
+	uint32_t dataInSize = 0;
+
+	if (!heightIn) {
+		dataInSize = widthIn;
+	}
+	else {
+		dataInSize = widthIn * heightIn;
+	}
+
+	unsigned char* bits = stbi_load_from_memory(dataIn, dataInSize, &width, &height, &picType, STBI_rgb_alpha);
+	for (int i = 0; i < width * height * 4; i += 4)
+	{
+		byte tmp = bits[i];
+		bits[i] = bits[i + 2];
+		bits[i + 2] = tmp;
+	}
+
+	Image* image = new Image(width, height, (RGBA*)bits);
+
+	return image;
+}
+
+void Image::destroyImage(Image* image) {
 	
 	if (image) {
 

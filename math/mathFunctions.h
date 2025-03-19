@@ -447,6 +447,7 @@ namespace math {
 	}
 
 	static vec4f lerp(const vec4f& v1, const vec4f& v2, const float& weight) {
+		
 		return v2 * weight + v1 * (1.0f - weight);
 	}
 
@@ -475,5 +476,39 @@ namespace math {
 	static vec4f lerp(const vec4f& v1, const vec4f& v2, const vec4f& v3, const float& weight1, const float& weight2, const float& weight3) {
 		return v1 * weight1 + v2 * weight2 + v3 * weight3;
 	}
+
+
+
+	// 4 Camera
+	template<typename T, typename V>
+	Matrix44<T> lookAt(const Vector3<V>& eye, const Vector3<V>& center, const Vector3<V>& top) {
+		
+		Vector3<V>& f = normalize(center - eye);
+		Vector3<V>& r = normalize(cross(f, top));
+		Vector3<V>& u = normalize(cross(r, f));
+
+		Matrix44<T> result(static_cast<T>(1));
+		
+		// First row
+		result.set(0, 0, r.x);
+		result.set(0, 1, r.y);
+		result.set(0, 2, r.z);
+		result.set(0, 3, -dot(r, eye));
+
+		// Second row
+		result.set(1, 0, u.x);
+		result.set(1, 1, u.y);
+		result.set(1, 2, u.z);
+		result.set(1, 3, -dot(u, eye));
+
+		// Third row
+		result.set(2, 0, -f.x);
+		result.set(2, 1, -f.y);
+		result.set(2, 2, -f.z);
+		result.set(2, 3, dot(f, eye));
+
+		return result;
+	}
+
 
 }

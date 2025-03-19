@@ -111,6 +111,7 @@ void Raster::interpolateLine(const VsOutput& v0, const VsOutput& v1, VsOutput& t
 	}
 
 	target.mColor = math::lerp(v0.mColor, v1.mColor, weight);
+	target.mNormal = math::lerp(v0.mNormal, v1.mNormal, weight);
 	target.mUV = math::lerp(v0.mUV, v1.mUV, weight);
 
 }
@@ -154,6 +155,7 @@ void Raster::rasterizeTriangle(std::vector<VsOutput>& results, const VsOutput& v
 
 void Raster::interpolateTriangle(const VsOutput& v0, const VsOutput& v1, const VsOutput& v2, VsOutput& p){
 
+	// Calculate triangle area
 	auto e1 = math::vec2f(v1.mPosition.x - v0.mPosition.x, v1.mPosition.y - v0.mPosition.y);
 	auto e2 = math::vec2f(v2.mPosition.x - v0.mPosition.x, v2.mPosition.y - v0.mPosition.y);
 	float sumArea = std::abs(math::cross(e1, e2));
@@ -171,7 +173,20 @@ void Raster::interpolateTriangle(const VsOutput& v0, const VsOutput& v1, const V
 	float weight1 = v1Area / sumArea;
 	float weight2 = v2Area / sumArea;
 
+	// Interpolate values
+	// 1/w
+	p.mOneOverW = math::lerp(v0.mOneOverW, v1.mOneOverW, v2.mOneOverW, weight0, weight1, weight2);
+
+	// depth
+	p.mPosition.z = math::lerp(v0.mPosition.z, v1.mPosition.z, v2.mPosition.z, weight0, weight1, weight2);
+
+	// color
 	p.mColor = math::lerp(v0.mColor, v1.mColor, v2.mColor, weight0, weight1, weight2);
+
+	// normal
+	p.mNormal = math::lerp(v0.mNormal, v1.mNormal, v2.mNormal, weight0, weight1, weight2);
+
+	// uv
 	p.mUV = math::lerp(v0.mUV, v1.mUV, v2.mUV, weight0, weight1, weight2);
 
 }

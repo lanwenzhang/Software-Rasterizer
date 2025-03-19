@@ -30,7 +30,7 @@ VsOutput DefaultShader::vertexShader(const std::map<uint32_t, BindingDescription
 
 }
 
-void DefaultShader::fragmentShader(const VsOutput& input, FsOutput& output) {
+void DefaultShader::fragmentShader(const VsOutput& input, FsOutput& output, const std::map<uint32_t, Texture*>& textures) {
 
 	output.mPixelPos.x = static_cast<int>(input.mPosition.x);
 	output.mPixelPos.y = static_cast<int>(input.mPosition.y);

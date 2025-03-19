@@ -15,8 +15,10 @@ struct BindingDescription {
 // Vertex shader output
 struct VsOutput {
 
+	float mOneOverW{ 0.0f };
 	math::vec4f mPosition{ 0.0f, 0.0f, 0.0f, 1.0f };
 	math::vec4f mColor;
+	math::vec3f mNormal;
 	math::vec2f mUV;
 
 };
